@@ -6,16 +6,15 @@
  * Return: height of tree, 0 if tree is NULL
  */
 
-size_t binary_tree_height(const binary_tree_t *tree) {
-    if (tree == NULL) {
-        return 0; // If tree is NULL, height is 0
-    }
+size_t binary_tree_height(const binary_tree_t *tree)
+{
+	size_t height_l = 0;
+	size_t height_r = 0;
 
-    // Recursively calculate the height of the left and right subtrees
-    size_t left_height = binary_tree_height(tree->left);
-    size_t right_height = binary_tree_height(tree->right);
+	if (!tree)
+		return (0);
+	height_l = tree->left ? 1 + binary_tree_height(tree->left) : 0;
+	height_r = tree->right ? 1 + binary_tree_height(tree->right) : 0;
 
-    // Return the maximum height between left and right subtrees plus 1 for the current node
-    return (left_height > right_height) ? left_height + 1 : right_height + 1;
+	return (height_l > height_r ? height_l : height_r);
 }
-
