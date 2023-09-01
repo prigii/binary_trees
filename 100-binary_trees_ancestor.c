@@ -7,32 +7,38 @@
  * Return: pointer to ancestor node, NULL if no ancestor is found
  */
 
-binary_tree_t *binary_trees_ancestor(const binary_tree_t *first, const binary_tree_t *second) {
-    if (first == NULL || second == NULL) {
-        return NULL; // If either node is NULL, no common ancestor
-    }
+binary_tree_t *binary_trees_ancestor(const binary_tree_t *first,
+		const binary_tree_t *second)
+{
+	size_t first_depth, second_depth;
 
-    // Find the depths of the nodes
-    size_t depth_first = binary_tree_depth(first);
-    size_t depth_second = binary_tree_depth(second);
+	if (!first || !second)
+		return (NULL);
 
-    // Move the deeper node up to the same level as the other node
-    while (depth_first > depth_second) {
-        first = first->parent;
-        depth_first--;
-    }
-    while (depth_second > depth_first) {
-        second = second->parent;
-        depth_second--;
-    }
+	first_depth = binary_tree_depth(first);
+	second_depth = binary_tree_depth(second);
 
-    // Move both nodes up in tandem until they meet at the common ancestor
-    while (first != NULL && second != NULL && first != second) {
-        first = first->parent;
-        second = second->parent;
-    }
+	while (first_depth > second_depth)
+	{
+		first = first->parent;
+		first_depth--;
+	}
 
-    return (first == NULL || second == NULL) ? NULL : (binary_tree_t *)first;
+	while (second_depth > first_depth)
+	{
+		second = second->parent;
+		second_depth--;
+	}
+
+	while (first && second)
+	{
+		if (first == second)
+			return ((binary_tree_t *)first);
+		first = first->parent;
+		second = second->parent;
+	}
+
+	return ((binary_tree_t *)first);
 }
 
 /**
@@ -41,11 +47,17 @@ binary_tree_t *binary_trees_ancestor(const binary_tree_t *first, const binary_tr
  * Return: depth of the node, 0 if tree is NULL
  */
 
-size_t binary_tree_depth(const binary_tree_t *tree) {
-    size_t depth = 0;
-    while (tree != NULL) {
-        tree = tree->parent;
-        depth++;
-    }
-    return depth;
+size_t binary_tree_depth(const binary_tree_t *tree)
+{
+	size_t depth = 0;
+
+	if (!tree)
+		return (0);
+	while (tree->parent)
+	{
+		depth++;
+		tree = tree->parent;
+	}
+
+	return (depth);
 }
